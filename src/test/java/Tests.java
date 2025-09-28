@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -17,9 +18,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class Tests {
     //Драйвер файрфокса
-    private FirefoxDriver driver;
+    //private FirefoxDriver driver;
+
     //Драйвер хрома
-    //private ChromeDriver driverChrome;
+    private ChromeDriver driver;
 
     public static Object[][] data() {
         return new Object[][] {
@@ -33,11 +35,16 @@ public class Tests {
     @BeforeEach
     public void setUp() {
         //Драйвер хрома
-        //WebDriverManager.chromedriver().setup();
-        WebDriverManager.firefoxdriver().setup();
-        driver = new FirefoxDriver();
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+
+        //Драйвер файрфокса
+        //WebDriverManager.firefoxdriver().setup();
+        //driver = new FirefoxDriver();
+
+
+
         BasePage page = new BasePage(driver);
-        //Добавить ожидание открытия страницы
         page.openPage();
     }
 
@@ -79,14 +86,13 @@ public class Tests {
         // Кликаем "Далее"
         orderPage.clickButton(orderPage.buttonOrder);
 
-        // Заполняем контактную информацию
+        // Заполняем номер телефона
         orderPage.fillContactInfo(phoneNumber);
 
         // Заполняем детали заказа
         orderPage.fillOrderDetails(date, days, color, comment);
 
-
-        // Ждём появления элемента успешного заказа
+        // Ждём появления элемента успешного заказа и проверяем его наличие
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         try {
             wait.until(ExpectedConditions.visibilityOf(orderPage.SuccessfulOrder));
@@ -100,7 +106,11 @@ public class Tests {
     //Тест на проверку открытия ответов на вопросы в разделе "Вопросы о важном"
     @Test
     public void checkFooterElementsIsOpened() {
-
+        BasePage page = new BasePage(driver);
+        for (int i = 1; i < 9; i++) {
+            driver.executeScript("arguments[0].scrollIntoView();", page.getItemListTitle(i));
+            page.getItemListTitle(i).click();
+        }
     }
 
     @AfterEach

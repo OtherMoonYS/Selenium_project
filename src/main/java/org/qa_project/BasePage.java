@@ -48,9 +48,9 @@ public class BasePage {
         }
     }
 
-    public String itemListTitle = ".//div[@aria-controls='accordion__panel-%d']";
+    public String itemListTitle = "(//div[@class='accordion__button'])[%d]";
 
-    public String getItemListTitle(int index) {
-        return driver.findElement(By.xpath(String.format(itemListTitle, index))).getText();
+    public WebElement getItemListTitle(int index) {
+        return driver.findElement(By.xpath(String.format(itemListTitle, index)));
     }
 }
