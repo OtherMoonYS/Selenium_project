@@ -23,8 +23,8 @@ public class Tests {
 
     public static Object[][] data() {
         return new Object[][] {
-                {"Юрий", "Санеев", "Москва", "Комсомольская", "89999561122", "28.09.2026", "1 сутки", "Черный", "Спасибо за работу"},
-                {"Валерий", "Костяков", "Москва", "Смоленская", "84321234365", "01.11.2029", "7 суток", "Серый", "Всегда пожалуйста"},
+                {"Юрий", "Санеев", "Москва", "89999561122", "28.09.2026", "1 сутки", "Черный", "Спасибо за работу"},
+                {"Валерий", "Костяков", "Москва", "84321234365", "01.11.2029", "7 суток", "Серый", "Всегда пожалуйста"},
         };
     }
 
@@ -61,7 +61,6 @@ public class Tests {
     public void checkSuccessfulOrder(String name,
                                      String surname,
                                      String address,
-                                     String station,
                                      String phoneNumber,
                                      String date,
                                      String days,
@@ -81,7 +80,7 @@ public class Tests {
         orderPage.clickButton(orderPage.buttonOrder);
 
         // Заполняем контактную информацию
-        orderPage.fillContactInfo(station, phoneNumber);
+        orderPage.fillContactInfo(phoneNumber);
 
         // Заполняем детали заказа
         orderPage.fillOrderDetails(date, days, color, comment);

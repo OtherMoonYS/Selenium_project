@@ -1,13 +1,11 @@
 package org.qa_project;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.interactions.Actions;
 
 import java.time.Duration;
 
@@ -53,11 +51,11 @@ public class OrderPage extends BasePage {
     public WebElement inputRentTime;
 
     //Кнопка выбора 1 суток
-    @FindBy(xpath = ".//div[@text()='сутки']")
+    @FindBy(xpath = "(.//div[@class='Dropdown-option'])[1]")
     public WebElement inputOneDay;
 
     //Кнопка выбора 7 суток
-    @FindBy(xpath = ".//div[@text()='семеро суток']")
+    @FindBy(xpath = "(.//div[@class='Dropdown-option'])[7]")
     public WebElement inputSevenDay;
 
     //Кнопка выбора черного цвета самоката
@@ -73,11 +71,11 @@ public class OrderPage extends BasePage {
     public WebElement inputComment;
 
     //Кнопка сделать заказ
-    @FindBy(xpath = ".//button[@text()='Заказать']")
+    @FindBy(xpath = ".//button[contains(@class, 'Button_Middle__1CSJM') and .='Заказать']")
     public WebElement buttonMakeOrder;
 
     //Кнопка подтверждения заказа
-    @FindBy(xpath = ".//button[@text()='Да']")
+    @FindBy(xpath = ".//button[.='Да']")
     public WebElement buttonConfirmOrder;
 
     //Текст с успешным заказом
@@ -92,9 +90,13 @@ public class OrderPage extends BasePage {
         wait.until(ExpectedConditions.visibilityOf(inputAddress)).sendKeys(address);
     }
 
-    public void fillContactInfo(String station,String phoneNumber) {
+    public void fillContactInfo(String phoneNumber) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-        wait.until(ExpectedConditions.visibilityOf(inputStation)).sendKeys(station);
+        clickButton(inputStation);
+        Actions actions = new Actions(driver);
+        actions.keyDown(Keys.DOWN).sendKeys("клик").keyUp(Keys.DOWN).perform();
+        actions.keyDown(Keys.ENTER).sendKeys("клик").keyUp(Keys.ENTER).perform();
+        
         wait.until(ExpectedConditions.visibilityOf(inputPhoneNumber)).sendKeys(phoneNumber);
         clickButton(buttonOrder);
     }
@@ -104,9 +106,9 @@ public class OrderPage extends BasePage {
         wait.until(ExpectedConditions.visibilityOf(inputDate)).sendKeys(date);
         clickButton(inputRentTime);
         if (days == "1 сутки") {
-            clickButton(inputOneDay);
+            wait.until(ExpectedConditions.visibilityOf(inputOneDay)).click();
         } else if (days == "7 суток") {
-            clickButton(inputSevenDay);
+            wait.until(ExpectedConditions.visibilityOf(inputSevenDay)).click();
         }
         if (color == "Черный") {
             clickButton(inputBlackColor);
@@ -115,12 +117,10 @@ public class OrderPage extends BasePage {
         }
         inputComment.sendKeys(comment);
         clickButton(buttonMakeOrder);
-        clickButton(buttonConfirmOrder);
+        wait.until(ExpectedConditions.visibilityOf(buttonConfirmOrder)).click();
     }
 
     public boolean checkSuccessfulOrder() {
-        if (SuccessfulOrder.isDisplayed()) {
-            System.out.println("Заказ успешно оформлен");
-        }
-        return SuccessfulOrder.isDisplayed();}
+        return SuccessfulOrder.isDisplayed();
+    }
 }
