@@ -1,13 +1,15 @@
 package org.qa_project;
 
-import org.openqa.selenium.*;
+import java.time.Duration;
+
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.interactions.Actions;
-
-import java.time.Duration;
 
 
 public class OrderPage extends BasePage {
@@ -80,7 +82,7 @@ public class OrderPage extends BasePage {
 
     //Текст с успешным заказом
     @FindBy(className = "Order_ModalHeader__3FDaJ")
-    public WebElement SuccessfulOrder;
+    public WebElement successfulOrder;
 
 
     public void fillPersonalInfo(String name,String surname,String address) {
@@ -121,6 +123,6 @@ public class OrderPage extends BasePage {
     }
 
     public boolean checkSuccessfulOrder() {
-        return SuccessfulOrder.isDisplayed();
+        return successfulOrder.isDisplayed();
     }
 }
