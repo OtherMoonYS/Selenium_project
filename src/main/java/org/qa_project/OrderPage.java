@@ -20,6 +20,10 @@ public class OrderPage extends BasePage {
         PageFactory.initElements(driver, this);
     }
 
+    //Окно заказа
+    @FindBy(className = "App_App__15LM-")
+    public WebElement orderWindow;
+    
     // Кнопка ввода имени
     @FindBy(xpath = ".//input[@placeholder='* Имя']")
     public WebElement inputName;
@@ -81,7 +85,7 @@ public class OrderPage extends BasePage {
     public WebElement buttonConfirmOrder;
 
     //Текст с успешным заказом
-    @FindBy(className = "Order_ModalHeader__3FDaJ")
+    @FindBy(xpath = ".//div[@class='Order_ModalHeader__3FDaJ']")
     public WebElement successfulOrder;
 
 
@@ -123,6 +127,7 @@ public class OrderPage extends BasePage {
     }
 
     public boolean checkSuccessfulOrder() {
-        return successfulOrder.isDisplayed();
+        successfulOrder.getText();
+        return successfulOrder.getText().contains("Заказ оформлен");
     }
 }

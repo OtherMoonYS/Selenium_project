@@ -16,12 +16,12 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class Tests {
+public class MakeOrderTests {
     //Драйвер файрфокса
-    //private FirefoxDriver driver;
+    private FirefoxDriver driver;
 
     //Драйвер хрома
-    private ChromeDriver driver;
+    //private ChromeDriver driver;
 
     public static Object[][] data() {
         return new Object[][] {
@@ -31,16 +31,15 @@ public class Tests {
     }
 
 
-
     @BeforeEach
     public void setUp() {
         //Драйвер хрома
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+        //WebDriverManager.chromedriver().setup();
+        //driver = new ChromeDriver();
 
         //Драйвер файрфокса
-        //WebDriverManager.firefoxdriver().setup();
-        //driver = new FirefoxDriver();
+        WebDriverManager.firefoxdriver().setup();
+        driver = new FirefoxDriver();
 
 
 
@@ -51,15 +50,17 @@ public class Tests {
     //Тест на проверку кнопки заказа в верхней части страницы
     @Test
     public void checkUpperOrderButtonIsWork() {
-        BasePage page = new BasePage(driver);
-        page.clickButton(page.orderButtonUpperPage);
+        OrderPage orderPage = new OrderPage(driver);
+        orderPage.clickButton(orderPage.orderButtonUpperPage);
+        assertTrue(orderPage.orderWindow.isDisplayed());
     }
 
     //Тест на проверку кнопки заказа в нижней части страницы
     @Test
     public void checkBottomOrderButtonIsWork() {
-        BasePage page = new BasePage(driver);
-        page.clickButton(page.orderButtonBottomPage);
+        OrderPage orderPage = new OrderPage(driver);
+        orderPage.clickButton(orderPage.orderButtonBottomPage);
+        assertTrue(orderPage.orderWindow.isDisplayed());
     }
 
     //Тест создающий заказ с разными параметрами
@@ -93,28 +94,18 @@ public class Tests {
         orderPage.fillOrderDetails(date, days, color, comment);
 
         // Ждём появления элемента успешного заказа и проверяем его наличие
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
         try {
-            wait.until(ExpectedConditions.visibilityOf(orderPage.SuccessfulOrder));
+            wait.until(ExpectedConditions.visibilityOf(orderPage.successfulOrder));
             boolean actualResult = orderPage.checkSuccessfulOrder();
             assertTrue(actualResult);
         } catch (TimeoutException e) {
-            fail("Элемент успешного заказа не отображается");
-        }
-    }
-
-    //Тест на проверку открытия ответов на вопросы в разделе "Вопросы о важном"
-    @Test
-    public void checkFooterElementsIsOpened() {
-        BasePage page = new BasePage(driver);
-        for (int i = 1; i < 9; i++) {
-            driver.executeScript("arguments[0].scrollIntoView();", page.getItemListTitle(i));
-            page.getItemListTitle(i).click();
+            fail("Не удалось найти элемент успешного заказа");
         }
     }
 
     @AfterEach
-    public void teardown() {
+    public void tearDown() {
         // Закрой браузер
         driver.quit();
     }

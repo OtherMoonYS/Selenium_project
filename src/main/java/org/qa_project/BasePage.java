@@ -31,6 +31,10 @@ public class BasePage {
     @FindBy (xpath = "(//div[@class='Home_FinishButton__1_cWm']//button[.='Заказать'])")
     public WebElement orderButtonBottomPage;
 
+    //Локатор для выбора элемента в списке вопросов футера
+    public String itemListTitle = "(//div[@class='accordion__button'])[%d]";
+
+
     // Открытие страницы по ссылке
     public void openPage() {
         driver.get(pageUrl);
@@ -48,9 +52,11 @@ public class BasePage {
         }
     }
 
-    public String itemListTitle = "(//div[@class='accordion__button'])[%d]";
-
     public WebElement getItemListTitle(int index) {
         return driver.findElement(By.xpath(String.format(itemListTitle, index)));
+    }
+
+    public String getAnswerQuestion(int index) {
+        return driver.findElement(By.xpath(String.format("(//div[@class='accordion__button'])[%d]//following::p[1]", index))).getText();
     }
 }
